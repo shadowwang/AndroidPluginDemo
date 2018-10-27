@@ -171,11 +171,19 @@ public class RefInvoke {
     public static Object getFiledObject(String className, String fieldName, Object obj) {
         try {
             Class clazz = Class.forName(className);
+            return getFiledObject(clazz, fieldName, obj);
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+       return null;
+    }
+
+    public static Object getFiledObject(Class clazz, String fieldName, Object obj) {
+        try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             return field.get(obj);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -187,7 +195,7 @@ public class RefInvoke {
     public static Object getFiledObject(String fieldName, Object obj) {
         try {
             Class clazz = obj.getClass();
-            Field field = clazz.getField(fieldName);
+            Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             return field.get(obj);
         } catch (NoSuchFieldException e) {
@@ -203,8 +211,11 @@ public class RefInvoke {
     }
 
     public static void setFieldObject(String fieldName, Object object, Object fieldVal) {
+        setFieldObject(object.getClass(), fieldName, object, fieldVal);
+    }
+
+    public static void setFieldObject(Class clazz, String fieldName, Object object, Object fieldVal) {
         try {
-            Class clazz = object.getClass();
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             field.set(object, fieldVal);

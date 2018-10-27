@@ -1,4 +1,4 @@
-package parsonswang.com.androidplugindemo;
+package parsonswang.com.androidplugindemo.hook;
 
 import android.app.Activity;
 import android.app.Instrumentation;
@@ -6,13 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
+import android.util.Log;
 
 import utils.RefInvoke;
 
 public class HookInstrumention extends Instrumentation {
+
+    private static final String TAG = HookInstrumention.class.getSimpleName();
 
     private Instrumentation instrumentation;
 
@@ -34,6 +34,8 @@ public class HookInstrumention extends Instrumentation {
                 who, contextThread, token, target,
                 intent, requestCode, options
         };
+
+        Log.i(TAG, "hook Instrumentation 跳转Activity");
 
         return (ActivityResult) RefInvoke.invokeInstanceMethod(instrumentation, "execStartActivity", params, values);
     }

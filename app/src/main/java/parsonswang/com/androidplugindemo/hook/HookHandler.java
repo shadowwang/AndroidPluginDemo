@@ -1,4 +1,4 @@
-package parsonswang.com.androidplugindemo;
+package parsonswang.com.androidplugindemo.hook;
 
 import android.util.Log;
 
@@ -17,9 +17,8 @@ public class HookHandler implements InvocationHandler {
 
     @Override
     public Object invoke(Object o, Method method, Object[] objects) throws Throwable {
-        Log.d(TAG, "---before invoke-----");
+        Log.d(TAG, "--- invoke-----" + method.getName());
         Object result =  method.invoke(target, objects);
-        Log.d(TAG, "---after invoke-----");
         return result;
     }
 }
