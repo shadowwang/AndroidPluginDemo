@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
 
         //方案三 hook ActivityThread的Handler的callback
         HookHelper.hookHandlerCallback();
+
+        //方案四 hook ActivityThreadInstrumention
+        HookHelper.hookActivityThreadInstrumention();
     }
 
     @Override

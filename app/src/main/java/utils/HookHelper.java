@@ -54,7 +54,15 @@ public class HookHelper {
         //获取当前的ActivityThread对象
         Object sCurrentActivityThread = RefInvoke.getStaticFiledObject("android.app.ActivityThread", "sCurrentActivityThread");
         Handler mH = (Handler) RefInvoke.getFiledObject("android.app.ActivityThread", "mH", sCurrentActivityThread);
+        //静态代理，针对类
+        RefInvoke.setFieldObject("mCallback", mH, new HookHandlerCallback(mH));
+    }
 
-        RefInvoke.setFieldObject(Handler.class, "mCallback", mH, new HookHandlerCallback(mH));
+    public static void hookActivityThreadInstrumention() {
+        Object sCurrentActivityThread = RefInvoke.getStaticFiledObject("android.app.ActivityThread", "sCurrentActivityThread");
+        Instrumentation instrumentation = (Instrumentation) RefInvoke.getFiledObject("android.app.ActivityThread", "mInstrumentation", sCurrentActivityThread);
+        HookInstrumention hookInstrumention = new HookInstrumention(instrumentation);
+
+        RefInvoke.setFieldObject("mInstrumentation", sCurrentActivityThread, hookInstrumention);
     }
 }
