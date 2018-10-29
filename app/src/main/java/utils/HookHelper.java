@@ -13,13 +13,14 @@ import parsonswang.com.androidplugindemo.hook.HookInstrumention;
 
 public class HookHelper {
 
+    public static final String EXTRA_TARGET_INTENT = "extra_target_intent";
+
     public static void hookActivityManager() {
         //获取AMN的gDefault
         try {
             Object singletonFiledInActivityManager;
             if (Build.VERSION.SDK_INT > 25 || (Build.VERSION.SDK_INT==25 && Build.VERSION.PREVIEW_SDK_INT > 0)) {
                 singletonFiledInActivityManager = RefInvoke.getStaticFiledObject("android.app.ActivityManager", "IActivityManagerSingleton");
-
             } else {
                 singletonFiledInActivityManager = RefInvoke.getStaticFiledObject("android.app.ActivityManagerNative", "gDefault");
             }
@@ -53,9 +54,9 @@ public class HookHelper {
     public static void hookHandlerCallback() {
         //获取当前的ActivityThread对象
         Object sCurrentActivityThread = RefInvoke.getStaticFiledObject("android.app.ActivityThread", "sCurrentActivityThread");
-        Handler mH = (Handler) RefInvoke.getFiledObject("android.app.ActivityThread", "mH", sCurrentActivityThread);
+        Handler mH = (Handler) RefInvoke.getFiledObject("mH", sCurrentActivityThread);
         //静态代理，针对类
-        RefInvoke.setFieldObject("mCallback", mH, new HookHandlerCallback(mH));
+        RefInvoke.setFieldObject(Handler.class, "mCallback", mH, new HookHandlerCallback(mH));
     }
 
     public static void hookActivityThreadInstrumention() {
