@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import utils.HookHelper;
 import utils.RefInvoke;
 
 public class HookInstrumention extends Instrumentation {
@@ -42,13 +43,20 @@ public class HookInstrumention extends Instrumentation {
         return (ActivityResult) RefInvoke.invokeInstanceMethod(instrumentation, "execStartActivity", params, values);
     }
 
-    public Activity newActivity(Class<?> clazz, Context context,
-                                IBinder token, Application application, Intent intent, ActivityInfo info,
-                                CharSequence title, Activity parent, String id,
-                                Object lastNonConfigurationInstance) throws InstantiationException,
-            IllegalAccessException {
-        Log.i(TAG, "hook Instrumentation newActivity");
-        return instrumentation.newActivity(clazz, context, token, application, intent, info, title, parent, id, lastNonConfigurationInstance);
+    public Activity newActivity(ClassLoader cl, String className,
+                                Intent intent)
+            throws InstantiationException, IllegalAccessException,
+            ClassNotFoundException {
+
+        Intent rawIntent = intent.getParcelableExtra(HookHelper.EXTRA_TARGET_INTENT);
+        //没有hook，走正常流程
+        if (rawIntent == null) {
+            Log.i(TAG, "hook Instrumentation newActivity 正常逻辑");
+            return instrumentation.newActivity(cl, className, intent);
+        }
+
+        Log.i(TAG, "hook Instrumentation newActivity hook逻辑");
+        return instrumentation.newActivity(cl, rawIntent.getComponent().getClassName(), rawIntent);
     }
 
     public void callActivityOnCreate(Activity activity, Bundle icicle) {

@@ -24,10 +24,10 @@ public class HookHandlerCallback implements Handler.Callback {
             case 100:
                 Log.d(TAG, "hook handler callback when start activity" + message.toString());
                 //替换为将要启动的真实Activity（没有在manifest注册过的）
-                Object obj = message.obj;
-                Intent intent = (Intent) RefInvoke.getFiledObject("intent", obj);
-                Intent targetIntent = intent.getParcelableExtra(HookHelper.EXTRA_TARGET_INTENT);
-                intent.setComponent(targetIntent.getComponent());
+//                Object obj = message.obj;
+//                Intent intent = (Intent) RefInvoke.getFiledObject("intent", obj);
+//                Intent targetIntent = intent.getParcelableExtra(HookHelper.EXTRA_TARGET_INTENT);
+//                intent.setComponent(targetIntent.getComponent());
                 break;
         }
 
