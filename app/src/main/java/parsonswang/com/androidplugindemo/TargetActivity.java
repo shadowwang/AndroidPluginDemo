@@ -15,6 +15,7 @@ import java.lang.reflect.Method;
 
 import dalvik.system.DexClassLoader;
 import parsonswang.com.mypluginlibrary.IBean;
+import parsonswang.com.mypluginlibrary.ICallBack;
 import utils.PluginUtils;
 
 /**
@@ -60,9 +61,17 @@ public class TargetActivity extends Activity {
 
                     IBean iBean = (IBean) beanObj;
                     iBean.setName("1234parsons");
+
+                    iBean.registResult(new ICallBack() {
+                        @Override
+                        public void setResult(String result) {
+                            btn1.setText(result);
+                        }
+                    });
+
                     String name = (String) method.invoke(beanObj);
                     Log.i(TAG, "getName: " + name);
-                    btn1.setText(name);
+
                 } catch (ClassNotFoundException   e) {
                     e.printStackTrace();
                 } catch (IllegalAccessException e) {

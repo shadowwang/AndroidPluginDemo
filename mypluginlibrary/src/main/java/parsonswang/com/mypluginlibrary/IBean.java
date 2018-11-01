@@ -6,4 +6,5 @@ public interface IBean {
 
     void setName(String name);
 
+    void registResult(ICallBack iCallBack);
 }
